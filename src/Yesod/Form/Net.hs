@@ -13,7 +13,9 @@ import Net.IPv4 (IPv4)
 import Net.Mac (Mac)
 import Data.Text (Text)
 import qualified Net.IPv4 as IPv4
+import qualified Net.IPv4.Text as IPv4Text
 import qualified Net.Mac as Mac
+import qualified Net.Mac.Text as MacText
 
 data NetFormMessage
   = MsgInvalidIPv4
@@ -28,9 +30,9 @@ ipv4Field :: ( Monad m
              , RenderMessage (HandlerSite m) NetFormMessage 
              , RenderMessage (HandlerSite m) FormMessage 
              ) => Field m IPv4
-ipv4Field = mapField IPv4.toDotDecimalText from textField
+ipv4Field = mapField IPv4Text.encode from textField
   where 
-  from t = case IPv4.fromDotDecimalText t of
+  from t = case IPv4Text.decode t of
     Nothing -> Left (SomeMessage MsgInvalidIPv4)
     Just ipv4 -> Right ipv4
 
@@ -38,9 +40,9 @@ macField :: ( Monad m
             , RenderMessage (HandlerSite m) NetFormMessage 
             , RenderMessage (HandlerSite m) FormMessage 
             ) => Field m Mac
-macField = mapField Mac.toText from textField
+macField = mapField MacText.encode from textField
   where 
-  from t = case Mac.fromText t of
+  from t = case MacText.decode t of
     Nothing -> Left (SomeMessage MsgInvalidMac)
     Just mac -> Right mac
 
