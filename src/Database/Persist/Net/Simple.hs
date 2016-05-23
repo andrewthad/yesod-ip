@@ -24,9 +24,15 @@ instance PersistField IPv4 where
   toPersistValue = toPersistValueTextShow IPv4Text.encode
   fromPersistValue = fromPersistValueTextRead IPv4Text.decode
 
+instance PersistFieldSql IPv4 where
+  sqlType _ = SqlString
+
 instance PersistField Mac where
   toPersistValue = toPersistValueTextShow MacText.encode
   fromPersistValue = fromPersistValueTextRead MacText.decode
+
+instance PersistFieldSql Mac where
+  sqlType _ = SqlString
 
 fromPersistValueTextRead :: (Text -> Maybe a) -> PersistValue -> Either Text a
 fromPersistValueTextRead fromText z = do

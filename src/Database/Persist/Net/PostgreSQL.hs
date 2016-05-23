@@ -20,6 +20,17 @@ import Net.IPv4 (IPv4)
 import Net.Mac (Mac)
 import qualified Data.Text as Text
 import qualified Net.IPv4.Text as IPv4Text
+import qualified Net.IPv4.ByteString.Char8 as IPv4ByteString
 
+instance PersistField IPv4 where
+  toPersistValue = toPersistValue . IPv4Text.encode
+  fromPersistValue v = case v of
+    PersistDbSpecific s -> case IPv4ByteString.decode s of
+      Just x -> Right x
+      Nothing -> Left (Text.pack "PersistValue IPv4: Invalid format")
+    _ -> Left (Text.pack "PersistValue IPv4: Not a PersistDbSpecific")
+
+instance PersistFieldSql IPv4 where
+  sqlType _ = SqlOther (Text.pack "inet")
 
 
