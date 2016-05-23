@@ -1,7 +1,9 @@
  {-# LANGUAGE OverloadedStrings #-}
 
--- | This module provides orphan instances for data types
---   from the @ip@ package. These instances will choose the
+-- | This module provides orphan instances for the typeclasses
+--   'PersistField' and 'PersistFieldSql'. The instances provided
+--   are for the data types 'IPv4' and 'Mac' from the @ip@ package. 
+--   These instances will choose the 
 --   standard text type for the database column. If you are
 --   using PostgreSQL, you may want to consider importing 
 --   the @Database.Persist.Net.PostgreSQL@ module instead.
