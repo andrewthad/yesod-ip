@@ -6,7 +6,6 @@
 --   * 'IPv4': @inet@
 --   * 'Mac': @macaddr@
 --   
---   This module is not yet complete.
 module Database.Persist.Net.PostgreSQL 
   () where
 
@@ -21,6 +20,8 @@ import Net.Mac (Mac)
 import qualified Data.Text as Text
 import qualified Net.IPv4.Text as IPv4Text
 import qualified Net.IPv4.ByteString.Char8 as IPv4ByteString
+import qualified Net.Mac.Text as MacText
+import qualified Net.Mac.ByteString.Char8 as MacByteString
 
 instance PersistField IPv4 where
   toPersistValue = toPersistValue . IPv4Text.encode
@@ -32,5 +33,17 @@ instance PersistField IPv4 where
 
 instance PersistFieldSql IPv4 where
   sqlType _ = SqlOther (Text.pack "inet")
+
+instance PersistField Mac where
+  toPersistValue = toPersistValue . MacText.encode
+  fromPersistValue v = case v of
+    PersistDbSpecific s -> case MacByteString.decode s of
+      Just x -> Right x
+      Nothing -> Left (Text.pack "PersistValue MAC: Invalid format")
+    _ -> Left (Text.pack "PersistValue MAC: Not a PersistDbSpecific")
+
+instance PersistFieldSql Mac where
+  sqlType _ = SqlOther (Text.pack "macaddr")
+
 
 
