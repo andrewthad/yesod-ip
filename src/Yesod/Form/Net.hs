@@ -4,6 +4,7 @@ module Yesod.Form.Net
   ( ipv4Field
   , macField
   , NetFormMessage(..)
+  , englishNetFormMessage
   ) where
 
 import Yesod.Core
