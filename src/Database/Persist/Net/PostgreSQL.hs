@@ -29,7 +29,7 @@ instance PersistField IPv4 where
     PersistDbSpecific s -> case IPv4ByteString.decode s of
       Just x -> Right x
       Nothing -> Left (Text.pack "PersistValue IPv4: Invalid format")
-    y -> Left $ Text.pack "PersistValue IPv4: Not a PersistDbSpecific " <> Text.pack (show y)
+    y -> Left $ Text.pack "PersistValue IPv4: Not a PersistDbSpecific: " <> Text.pack (show y)
 
 instance PersistFieldSql IPv4 where
   sqlType _ = SqlOther (Text.pack "inet")
