@@ -29,6 +29,9 @@ instance PersistField IPv4 where
     PersistDbSpecific s -> case IPv4ByteString.decode s of
       Just x -> Right x
       Nothing -> Left (Text.pack "PersistValue IPv4: Invalid format")
+    PersistText t -> case IPv4Text.decode t of
+      Just x -> Right x
+      Nothing -> Left (Text.pack "PersistValue IPv4: Invalid format")
     y -> Left $ Text.pack "PersistValue IPv4: Not a PersistDbSpecific: " <> Text.pack (show y)
 
 instance PersistFieldSql IPv4 where
@@ -38,6 +41,9 @@ instance PersistField Mac where
   toPersistValue = toPersistValue . MacText.encode
   fromPersistValue v = case v of
     PersistDbSpecific s -> case MacByteString.decode s of
+      Just x -> Right x
+      Nothing -> Left (Text.pack "PersistValue MAC: Invalid format")
+    PersistText t -> case MacText.decode t of
       Just x -> Right x
       Nothing -> Left (Text.pack "PersistValue MAC: Invalid format")
     y -> Left $ Text.pack "PersistValue MAC: Not a PersistDbSpecific: " <> Text.pack (show y)
