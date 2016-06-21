@@ -40,11 +40,7 @@ instance PersistField Mac where
     PersistDbSpecific s -> case MacByteString.decode s of
       Just x -> Right x
       Nothing -> Left (Text.pack "PersistValue MAC: Invalid format")
-<<<<<<< HEAD
     y -> Left $ Text.pack "PersistValue MAC: Not a PersistDbSpecific: " <> Text.pack (show y)
-=======
-    y -> Left $ Text.pack "PersistValue MAC: Not a PersistDbSpecific " <> Text.pack (show y)
->>>>>>> 4dfb9b2397e3840525c364bdf2aa62f669f46e71
 
 instance PersistFieldSql Mac where
   sqlType _ = SqlOther (Text.pack "macaddr")
