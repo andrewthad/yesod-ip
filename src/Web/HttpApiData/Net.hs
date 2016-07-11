@@ -6,8 +6,7 @@ module Web.HttpApiData.Net () where
 import Web.HttpApiData (ToHttpApiData(..),FromHttpApiData(..))
 import Data.Text (Text)
 import Data.Monoid
-import Net.IPv4 (IPv4)
-import Net.Mac (Mac)
+import Net.Types (IPv4,Mac)
 import qualified Data.Text as Text
 import qualified Net.IPv4.Text as IPv4Text
 import qualified Net.IPv4.ByteString.Char8 as IPv4ByteString

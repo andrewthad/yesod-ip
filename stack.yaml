@@ -2,9 +2,13 @@ resolver: lts-5.17
 
 packages:
 - '.'
+- location:
+    git:    'https://github.com/andrewthad/haskell-ip'
+    commit: '963c7bf368cd33bdd51635873a32c0d800f694de'
+  extra-dep: true
 
-extra-deps:
-- 'ip-0.6.0'
+# extra-deps:
+# - 'ip-0.6.0'
 
 # Override default flag values for local packages and extra-deps
 flags: {}

@@ -6,8 +6,7 @@ module Web.PathPieces.Net where
 import Web.PathPieces (PathPiece(..))
 import Data.Text (Text)
 import Data.Monoid
-import Net.IPv4 (IPv4)
-import Net.Mac (Mac)
+import Net.Types (IPv4,Mac)
 import qualified Net.IPv4.Text as IPv4Text
 import qualified Net.Mac.Text as MacText
 
