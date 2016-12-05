@@ -4,7 +4,7 @@ packages:
 - '.'
 - location:
     git:    'https://github.com/andrewthad/haskell-ip'
-    commit: '963c7bf368cd33bdd51635873a32c0d800f694de'
+    commit: '3ccce5ddb6a9d60ca13dc50545b678da1f17c8e0'
   extra-dep: true
 
 # extra-deps:
