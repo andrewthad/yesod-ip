@@ -3,35 +3,34 @@
 
 module Web.HttpApiData.Net () where
 
-import Web.HttpApiData (ToHttpApiData(..),FromHttpApiData(..))
-import Data.Text (Text)
 import Data.Monoid
+import Data.Text (Text)
 import Net.Types (IPv4,Mac)
+import Web.HttpApiData (ToHttpApiData(..),FromHttpApiData(..))
+
 import qualified Data.Text as Text
-import qualified Net.IPv4.Text as IPv4Text
-import qualified Net.IPv4.ByteString.Char8 as IPv4ByteString
-import qualified Net.Mac.Text as MacText
-import qualified Net.Mac.ByteString.Char8 as MacByteString
+import qualified Net.IPv4 as IPv4
+import qualified Net.Mac as Mac
 
 instance ToHttpApiData Mac where
-  toUrlPiece   = MacText.encode
-  toHeader     = MacByteString.encode
-  toQueryParam = MacText.encode
+  toUrlPiece   = Mac.encode
+  toHeader     = Mac.encodeUtf8
+  toQueryParam = Mac.encode
 
 instance FromHttpApiData Mac where
-  parseUrlPiece   = describeError mac . MacText.decode
-  parseQueryParam = describeError mac . MacText.decode
-  parseHeader     = describeError mac . MacByteString.decode
+  parseUrlPiece   = describeError mac . Mac.decode
+  parseQueryParam = describeError mac . Mac.decode
+  parseHeader     = describeError mac . Mac.decodeUtf8
 
 instance ToHttpApiData IPv4 where
-  toUrlPiece   = IPv4Text.encode
-  toHeader     = IPv4ByteString.encode
-  toQueryParam = IPv4Text.encode
+  toUrlPiece   = IPv4.encode
+  toHeader     = IPv4.encodeUtf8
+  toQueryParam = IPv4.encode
 
 instance FromHttpApiData IPv4 where
-  parseUrlPiece   = describeError ipv4 . IPv4Text.decode
-  parseQueryParam = describeError ipv4 . IPv4Text.decode
-  parseHeader     = describeError ipv4 . IPv4ByteString.decode
+  parseUrlPiece   = describeError ipv4 . IPv4.decode
+  parseQueryParam = describeError ipv4 . IPv4.decode
+  parseHeader     = describeError ipv4 . IPv4.decodeUtf8
 
 mac,ipv4 :: Text
 mac = Text.pack "MAC Address"

@@ -3,18 +3,19 @@
 
 module Web.PathPieces.Net where
 
-import Web.PathPieces (PathPiece(..))
-import Data.Text (Text)
 import Data.Monoid
+import Data.Text (Text)
 import Net.Types (IPv4,Mac)
-import qualified Net.IPv4.Text as IPv4Text
-import qualified Net.Mac.Text as MacText
+import Web.PathPieces (PathPiece(..))
+
+import qualified Net.IPv4 as IPv4
+import qualified Net.Mac as Mac
 
 instance PathPiece Mac where
-  toPathPiece   = MacText.encode
-  fromPathPiece = MacText.decode
+  toPathPiece   = Mac.encode
+  fromPathPiece = Mac.decode
 
 instance PathPiece IPv4 where
-  toPathPiece   = IPv4Text.encode
-  fromPathPiece = IPv4Text.decode
+  toPathPiece   = IPv4.encode
+  fromPathPiece = IPv4.decode
 

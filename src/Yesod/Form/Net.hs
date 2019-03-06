@@ -8,16 +8,14 @@ module Yesod.Form.Net
   , englishNetFormMessage
   ) where
 
+import Data.Text (Text)
+import Net.Types (IPv4, IPv4Range, Mac)
 import Yesod.Core
 import Yesod.Form.Fields
 import Yesod.Form.Types
-import Net.Types (IPv4, IPv4Range, Mac)
-import Data.Text (Text)
+
 import qualified Net.IPv4 as IPv4
-import qualified Net.IPv4.Text as IPv4Text
-import qualified Net.IPv4.Range.Text as IPv4RangeText
 import qualified Net.Mac as Mac
-import qualified Net.Mac.Text as MacText
 
 data NetFormMessage
   = MsgInvalidIPv4
@@ -35,9 +33,9 @@ ipv4Field ::
   , RenderMessage (HandlerSite m) NetFormMessage
   , RenderMessage (HandlerSite m) FormMessage
   ) => Field m IPv4
-ipv4Field = mapField IPv4Text.encode from textField
+ipv4Field = mapField IPv4.encode from textField
   where
-  from t = case IPv4Text.decode t of
+  from t = case IPv4.decode t of
     Nothing -> Left (SomeMessage MsgInvalidIPv4)
     Just ipv4 -> Right ipv4
 
@@ -46,9 +44,9 @@ ipv4RangeField ::
   , RenderMessage (HandlerSite m) NetFormMessage
   , RenderMessage (HandlerSite m) FormMessage
   ) => Field m IPv4Range
-ipv4RangeField = mapField IPv4RangeText.encode from textField
+ipv4RangeField = mapField IPv4.encodeRange from textField
   where
-  from t = case IPv4RangeText.decode t of
+  from t = case IPv4.decodeRange t of
     Nothing -> Left (SomeMessage MsgInvalidIPv4Range)
     Just r -> Right r
 
@@ -57,9 +55,9 @@ macField :: ( Monad m
             , RenderMessage (HandlerSite m) NetFormMessage
             , RenderMessage (HandlerSite m) FormMessage
             ) => Field m Mac
-macField = mapField MacText.encode from textField
+macField = mapField Mac.encode from textField
   where
-  from t = case MacText.decode t of
+  from t = case Mac.decode t of
     Nothing -> Left (SomeMessage MsgInvalidMac)
     Just mac -> Right mac
 
