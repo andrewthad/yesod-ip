@@ -15,6 +15,8 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
+  other-modules:
+    Net.IPv4.Unnormalized
   exposed-modules:
     Yesod.Form.Net
     Database.Persist.Net.Simple
@@ -23,14 +25,14 @@ library
     Web.HttpApiData.Net
   build-depends:
       base >= 4.7 && < 5
+    , attoparsec >= 0.13.2 && < 0.14
+    , http-api-data >= 0.3 && < 0.5
+    , ip >= 1.4.1 && < 1.5
+    , path-pieces >= 0.2 && < 0.3
+    , persistent >= 2.1
     , text >= 1.2
     , yesod-core >= 1.4 && < 1.7
     , yesod-form >= 1.4 && < 1.7
-    , persistent >= 2.1
-    , path-pieces >= 0.2 && < 0.3
-    , http-api-data >= 0.3 && < 0.5
-    , ip >= 1.4.1 && < 1.5
-    , attoparsec >= 0.13.2 && < 0.14
   default-language:    Haskell2010
 
 source-repository head
