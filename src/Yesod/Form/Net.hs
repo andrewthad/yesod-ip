@@ -9,13 +9,14 @@ module Yesod.Form.Net
   ) where
 
 import Data.Text (Text)
-import Net.Types (IPv4, IPv4Range, Mac)
+import Net.Types (IPv4, IPv4Range(..), Mac)
 import Yesod.Core
 import Yesod.Form.Fields
 import Yesod.Form.Types
 
 import qualified Net.IPv4 as IPv4
 import qualified Net.Mac as Mac
+import qualified Data.Attoparsec.Text as AT
 
 data NetFormMessage
   = MsgInvalidIPv4
@@ -50,6 +51,42 @@ ipv4RangeField = mapField IPv4.encodeRange from textField
     Nothing -> Left (SomeMessage MsgInvalidIPv4Range)
     Just r -> Right r
 
+-- | This is similar to 'ipv4RangeField'. However, it preserves the
+-- original IPv4 address that the user enters rather than normalizing
+-- the range. For example, on the user input @192.168.1.55/24@, the
+-- functions return:
+--
+-- * 'unnormalizedIPv4RangeField': @'IPv4Range' ('ipv4' 192 168 1 55) 24@
+-- * 'ipv4RangeField': @'IPv4Range' ('ipv4' 192 168 1 0) 24@
+unnormalizedIPv4RangeField :: 
+  ( Monad m
+  , RenderMessage (HandlerSite m) NetFormMessage
+  , RenderMessage (HandlerSite m) FormMessage
+  ) => Field m IPv4Range
+unnormalizedIPv4RangeField = mapField IPv4.encodeRange from textField
+  where
+  from t = case unnormalizedDecodeRange t of
+    Nothing -> Left (SomeMessage MsgInvalidIPv4Range)
+    Just r -> Right r
+
+-- Decode an 'IPv4Range' from 'Text'.
+unnormalizedDecodeRange :: Text -> Maybe IPv4Range
+unnormalizedDecodeRange =
+  either (const Nothing) Just . AT.parseOnly (unnormalizedParserRange <* AT.endOfInput)
+
+-- The same this as parserRange except that it does not
+-- do any normalization of the range.
+unnormalizedParserRange :: AT.Parser IPv4Range
+unnormalizedParserRange = do
+  ip <- IPv4.parser
+  _ <- AT.char '/'
+  theMask <- AT.decimal >>= limitSize
+  return (IPv4Range ip theMask)
+  where
+  limitSize i =
+    if i > 32
+      then fail "An IPv4 range length must be between 0 and 32"
+      else return i
 
 macField :: ( Monad m
             , RenderMessage (HandlerSite m) NetFormMessage
